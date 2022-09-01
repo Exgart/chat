@@ -1,0 +1,39 @@
+.dots {
+  display: inline-block;
+  width: max-content;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  background-color: #90caf9;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: dotFlashing .5s .1s infinite linear alternate;
+  margin-right: 2px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:nth-child(2) {
+    animation-delay: .5s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: .7s;
+  }
+}
+
+@keyframes dotFlashing {
+  0% {
+    transform: scale(.5);
+  }
+  50%,
+  100% {
+    transform: scale(1.1);
+  }
+}

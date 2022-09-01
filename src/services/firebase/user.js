@@ -1,4 +1,4 @@
-import { auth, database } from '.'
+import { auth, realtimeDB } from '.'
 import {
   ref,
   get,
@@ -12,17 +12,21 @@ import {
 
 async function getUserByUsername(username) {
   const q = query(
-    ref(database, 'users'),
+    ref(realtimeDB, 'users'),
     orderByChild('username'),
     equalTo(username)
   )
   const result = await get(q)
 
-  return result.val()
+  if (result.val()) {
+    return Object.values(result.val())[0]
+  } else {
+    return null
+  }
 }
 
 async function getUserById(id) {
-  const result = await get(ref(database, `users/${id}`))
+  const result = await get(ref(realtimeDB, `users/${id}`))
 
   return result.val()
 }
@@ -31,7 +35,7 @@ async function updateUser(id, values) {
   const user = `users/${id}`
 
   try {
-    return await update(ref(database, user), values)
+    return await update(ref(realtimeDB, user), values)
   } catch (error) {
     throw error
   }
@@ -39,8 +43,8 @@ async function updateUser(id, values) {
 
 function initCurrentUserStatusObserver() {
   const id = auth.currentUser?.uid
-  const connectedRef = ref(database, '.info/connected')
-  const statusRef = ref(database, `users/${id}/status`)
+  const connectedRef = ref(realtimeDB, '.info/connected')
+  const statusRef = ref(realtimeDB, `users/${id}/status`)
 
   onValue(connectedRef, (snap) => {
     if (snap.val()) {

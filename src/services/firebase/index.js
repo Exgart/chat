@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getDatabase, serverTimestamp } from 'firebase/database'
+import { getDatabase } from 'firebase/database'
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage'
 
 const config = {
@@ -17,13 +18,13 @@ const app = initializeApp(config)
 
 export const auth = getAuth(app)
 
-export const database = getDatabase(
+export const realtimeDB = getDatabase(
   app,
   process.env.REACT_APP_FIREBASE_REALTIME_DB_URL
 )
 
-export const storage = getStorage(app)
+export const firestoreDB = getFirestore(app)
 
-export const getServerTimeStamp = () => serverTimestamp()
+export const storage = getStorage(app)
 
 export default app

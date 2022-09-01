@@ -1,5 +1,5 @@
 import { auth } from '.'
-import { getUserById, updateUser } from './user'
+import { getUserById, updateCurrentUser, updateUser } from './user'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -14,7 +14,6 @@ async function createNewUserWithEmail({ username, email, password }) {
     return await updateUser(user.uid, {
       id: user.uid,
       username: username,
-      login: true,
       email,
     })
   } catch (error) {
@@ -44,16 +43,13 @@ async function signInWithGoogle() {
         img: user.photoURL
       })
     }
-    
-    updateUser(user.uid, {
-      login: true
-    })
   } catch (error) {
     throw error
   }
 }
 
 function logout() {
+  updateCurrentUser({status: 'offline'})
   signOut(auth)
 }
 
